@@ -27,9 +27,9 @@ EEG-based emotion recognition technolog
 	pip install requirements.txt
 ```
 ### Data Preprocessing
-> 1. Download Data from the [Official website].(https://bcmi.sjtu.edu.cn/home/seed)
-> 2. Preprocess the data: 
+	1. Download Data from the [Official website].(https://bcmi.sjtu.edu.cn/home/seed)
+	2. Preprocess the data: 
 ``` Python
 	python seedDownload.py
 ```
->> This will create a train/test file for each subject with pt files containing the preprocessed data and save everything inside
+		*This will create a train/test file for each subject with pt files containing the preprocessed data and save everything inside
