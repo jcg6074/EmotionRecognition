@@ -64,7 +64,7 @@ for feature_type in feature_types:
 						##스케일링 진행
             stacked_arr = scaling(stacked_arr)
             de_Data = {"input":torch.Tensor(stacked_arr), "label":torch.Tensor(stacked_label), "mask":torch.Tensor(stacked_mask)}
-            torch.save(de_Data,"mindreader/SEED_data/test_"+str(i)+"de.pt")
+            torch.save(de_Data,"SEED_data/test_"+str(i)+"de.pt")
           
 ###train dataset 만들기
 for i in range(15):
@@ -87,6 +87,6 @@ for i in range(15):
                 total_mask = torch.cat([total_mask,current_mask],dim=0)
 
     Data = {"input":total_input, "label":total_label, "mask":total_mask}
-    torch.save(Data,"mindreader/SEED_data/train_"+str(i)+"de.pt")
+    torch.save(Data,"SEED_data/train_"+str(i)+"de.pt")
      
 				
