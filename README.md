@@ -21,8 +21,15 @@ EEG-based emotion recognition technolog
 ## FastSlow Emotion Network
 ![fig1_overview_new](https://github.com/user-attachments/assets/6e9116b8-0b56-47be-8e54-3e63be87ea01)
 
-## How to use
+## How to use(SEED)
 ### Install requirements
 ``` Python
 	pip install requirements.txt
 ```
+### Data Preprocessing
+> 1. Download Data from the [Official website].(https://bcmi.sjtu.edu.cn/home/seed)
+> 2. Preprocess the data: 
+``` Python
+	python seedDownload.py
+```
+>> This will create a train/test file for each subject with pt files containing the preprocessed data and save everything inside
