@@ -19,3 +19,4 @@ variance of data features per class. This validates its practical potential in r
 EEG-based emotion recognition technolog
 
 ## FastSlow Emotion Network
+!(https://github.com/jcg6074/EmotionRecognition/issues/1#issue-2613038790)
