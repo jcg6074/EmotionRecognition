@@ -21,6 +21,9 @@ EEG-based emotion recognition technolog
 ## FastSlow Emotion Network
 ![fig1_overview_new](https://github.com/user-attachments/assets/6e9116b8-0b56-47be-8e54-3e63be87ea01)
 
+## Comparison Result
+![result](https://github.com/user-attachments/assets/02f8e946-4d6b-4d00-9ff0-5a1e0acd72bb)
+
 ## How to use(SEED)
 ### Install requirements
 ``` Python
