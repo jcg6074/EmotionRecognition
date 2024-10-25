@@ -18,3 +18,4 @@ valence and 84.97% for arousal on Dreamer. These results highlight FSEN’s robu
 variance of data features per class. This validates its practical potential in real-world applications, offering substantial advancement in
 EEG-based emotion recognition technolog
 
+## FastSlow Emotion Network
