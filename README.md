@@ -1,7 +1,6 @@
 # FSEN: FastSlow Emotion Network for Cross-Subject EEG Emotion Recognition
 
 Changgyun Jin, Hanul Kim and *Seong-Eun Kim<br/>
-IEEE Transactions on Neural Systems & Rehabilitation Engineerin under review<br/>
 
 ## Abstart
 As humanoid robots and artificial intelligence technologies advance, accurately recognizing human emotions has become
