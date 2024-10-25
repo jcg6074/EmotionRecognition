@@ -37,6 +37,6 @@ EEG-based emotion recognition technolog
 ### Training
 > To train with specific hyperparameters run
 ``` Python
-	python seedDownload.py
+	python main_seed.py
 ```
 >> Optimal hyperparameters can be found in the arguments descriprion.
