@@ -32,11 +32,11 @@ EEG-based emotion recognition technolog
 ``` Python
 	python seedDownload.py
 ```
->>*This will create a train/test file for each subject with pt files containing the preprocessed data and save everything inside
+>> This will create a train/test file for each subject with pt files containing the preprocessed data and save everything inside
 
 ### Training
-> *To train with specific hyperparameters run
+> To train with specific hyperparameters run
 ``` Python
 	python seedDownload.py
 ```
->> *Optimal hyperparameters for arousal and valence can be found in the arguments descriprion.
+>> Optimal hyperparameters can be found in the arguments descriprion.
