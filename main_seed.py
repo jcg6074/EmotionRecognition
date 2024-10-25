@@ -22,7 +22,7 @@ import scipy.io as sio
 from scipy.io import savemat
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--experiment", type=str, default="seed_independent")
+parser.add_argument("--experiment", type=str, default="SEED_data")
 parser.add_argument("--subjects", type=int, default=15)
 parser.add_argument("--classes", type=int, default=3)
 parser.add_argument("--model", type=str, default="FastSlow")
@@ -34,6 +34,7 @@ parser.add_argument("--smoothing", type=float, default=0.1)
 parser.add_argument("--weight_decay", type=float, default=0.05)
 parser.add_argument("--device", type=str, default="cuda:2")
 parser.add_argument("--checkpoint_dir", type=str, default="checkpoint")
+parser.add_argument("--topk", type=int, default=100)
 args = parser.parse_args()
 
 
@@ -104,38 +105,13 @@ def evaluate(model, loader):
     return accuracy, labels, predictions, recons, origin
 
 
-# class FramewiseCELoss(torch.nn.Module):
-#     def __init__(self, classes, smoothing=0.0, dim=-1):
-#         super(FramewiseCELoss, self).__init__()
-#         self.confidence = 1.0 - smoothing
-#         self.smoothing = smoothing
-#         self.classes = classes
-#         self.dim = dim
-
-#     def forward(self, outputs, targets):
-#         B, T, C = outputs.shape
-#         targets = targets.reshape(B, 1, C)
-#         targets = torch.tile(targets, (1, T, 1))
-#         outputs = outputs.reshape(B * T, C)
-#         targets = targets.reshape(B * T, C)
-
-#         outputs = outputs.log_softmax(dim=self.dim)
-#         with torch.no_grad():
-#             indicator = 1.0 - targets
-#             smooth_targets = torch.zeros_like(targets)
-#             smooth_targets.fill_(self.smoothing / (self.classes - 1))
-#             smooth_targets = targets * self.confidence + indicator * smooth_targets
-        
-#         return torch.mean(torch.sum(-smooth_targets * outputs, dim=self.dim))
-
-
 def main(phase=0, topk = None, target=None, subject_id=None, var=None):
     fix_random_seeds(0)
 
     logs = []
     for subject_id in range(0, args.subjects):
         if phase==2:
-            f = sio.loadmat("data/target/SEED_targetdata(" + str(subject_id) + ").mat")
+            f = sio.loadmat("target/SEED_targetdata(" + str(subject_id) + ").mat")
             # f = sio.loadmat("data/middlespot(2).mat")
             data1 = np.array(f['class1'])
             data2 = np.array(f['class2'])
@@ -146,8 +122,8 @@ def main(phase=0, topk = None, target=None, subject_id=None, var=None):
             target[1] = data2
             target[2] = data3
               
-        train_dataset = Dataset(f"./data/{args.experiment}/id{subject_id}_train.pt", target=target, variance = var)
-        test_dataset = Dataset(f"./data/{args.experiment}/id{subject_id}_test.pt" ,training=False, target=target, variance = var)
+        train_dataset = Dataset(f".{args.experiment}/id{subject_id}_train.pt", target=target, variance = var)
+        test_dataset = Dataset(f".{args.experiment}/id{subject_id}_test.pt" ,training=False, target=target, variance = var)
         train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=1)
         
@@ -159,14 +135,13 @@ def main(phase=0, topk = None, target=None, subject_id=None, var=None):
         criterion = LabelSmoothingLoss(3, smoothing=args.smoothing)
         triplet = TripletLoss(args.device)
         mse = torch.nn.MSELoss()
-        # criterion = nn.CrossEntropyLoss()
         train_recons=[]
         train_pred = []
         
         # Train Loop
         best_accuracy = 0.0
         for epoch in range(args.epochs):
-            train_dataset = Dataset(f"./data/{args.experiment}/id{subject_id}_train.pt", target=target, variance = var)
+            train_dataset = Dataset(f".{args.experiment}/id{subject_id}_train.pt", target=target, variance = var)
             train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
             loss = train(model, train_loader, criterion, mse, optimizer, scheduler, phase, triplet)
             train_accuracy, train_label, train_pred,train_recons,origin = evaluate(model, train_loader)
@@ -226,15 +201,8 @@ def main(phase=0, topk = None, target=None, subject_id=None, var=None):
                 
 
                 mat_dic = {"class1": data1, "class2": data2, "class3": data3}
-                savemat("data/target/SEED_targetdata(" + str(subject_id) + ").mat", mat_dic)
+                savemat("target/SEED_targetdata(" + str(subject_id) + ").mat", mat_dic)
                 break
-                #confusion matrix
-                # fig, ax = plt.subplots(figsize=(3,3))
-                # plot = confusion_matrix(test_label, test_pred)
-                # #print(test_label)
-                # #print(test_pred)
-                # f = sns.heatmap(plot, annot=True, fmt='.2f', cmap='Blues')
-                # plt.savefig(f'./plot/seed_trial1/subject_{subject_id}_acc_{best_accuracy:.4f}.png')
 
         
             if phase == 2 and test_accuracy >= 1.0:
@@ -248,8 +216,7 @@ def main(phase=0, topk = None, target=None, subject_id=None, var=None):
 
 
 if __name__=="__main__":
-    top = [1,2,4,8,25,50,100]
     for k in range(1):
-        #main(phase=1, topk=100, var= 0)
+        main(phase=1, topk=args.topk, var= 0)
 
-        main(phase=2, topk=100, var= 0)
+        main(phase=2, topk=args.topk, var= 0)
